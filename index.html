@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistem Antrean Digital Terpadu (SADT)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+    <!-- Demo Role Switcher -->
+    <div class="demo-role-switcher" id="demo-nav">
+        <button onclick="Navigation.switchRole('user')" class="active" id="btn-role-user">Portal Pengunjung</button>
+        <button onclick="Navigation.switchRole('monitor')" id="btn-role-monitor">Monitor Publik</button>
+        <button onclick="Navigation.switchRole('admin')" id="btn-role-admin">Portal Admin</button>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- ============================== -->
+        <!--        USER PORTAL VIEW        -->
+        <!-- ============================== -->
+        <div id="view-user" class="role-view active">
+            
+            <!-- Step 1: Service Selection -->
+            <div id="user-step-service" class="user-subview active">
+                <header class="user-header">
+                    <h1>Sistem Antrean Digital Terpadu</h1>
+                    <p>Status Umum Saat Ini: <span class="status-badge" id="general-status">Normal</span></p>
+                </header>
+                <div class="service-grid">
+                    <button class="service-card glass-card" onclick="Navigation.selectService('Layanan Umum')">
+                        <h3>Layanan Umum</h3>
+                        <p>Informasi dan pertanyaan</p>
+                    </button>
+                    <button class="service-card glass-card" onclick="Navigation.selectService('Bantuan Teknis')">
+                        <h3>Bantuan Teknis</h3>
+                        <p>Masalah IT dan sistem</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Identity Input -->
+            <div id="user-step-identity" class="user-subview">
+                <div class="identity-card glass-card">
+                    <button class="btn-back" onclick="Navigation.goToUserStep('service')">← Kembali</button>
+                    <h2>Detail Pengunjung</h2>
+                    <p>Silakan masukkan informasi Anda (Opsional)</p>
+                    <div class="form-group">
+                        <label>Nama Lengkap</label>
+                        <input type="text" id="visitor-name" placeholder="Misal: Budi Santoso">
+                    </div>
+                    <div class="form-group">
+                        <label>Nomor Telepon</label>
+                        <input type="tel" id="visitor-phone" placeholder="Misal: 0812...">
+                    </div>
+                    <button class="btn-primary" onclick="App.generateTicket()">Buat Tiket</button>
+                </div>
+            </div>
+
+            <!-- Step 3: E-Ticket Dashboard -->
+            <div id="user-step-ticket" class="user-subview">
+                <div class="ticket-dashboard glass-card" id="printable-ticket">
+                    <div class="ticket-header">
+                        <h2>E-Tiket Anda</h2>
+                        <span id="ticket-service-name">Layanan</span>
+                    </div>
+                    <div class="ticket-number-display glow-text" id="user-ticket-number">A-001</div>
+                    <div class="ticket-details">
+                        <p>Nama: <strong id="user-ticket-name">-</strong></p>
+                        <p>Waktu Terbit: <strong id="user-ticket-time">-</strong></p>
+                    </div>
+                    
+                    <div class="progress-section inner-shadow">
+                        <div class="progress-labels">
+                            <span>Menunggu Giliran: <strong id="people-ahead">0</strong> orang</span>
+                            <span>Estimasi: <strong id="est-wait">0 menit</strong></span>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="wait-progress"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-outline" onclick="App.printTicket()">Unduh PDF</button>
+                    <button class="btn-outline" onclick="App.takeAnotherTicket()">Tiket Baru</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!--     PUBLIC MONITOR VIEW        -->
+        <!-- ============================== -->
+        <div id="view-monitor" class="role-view">
+            <div class="monitor-layout">
+                <div class="now-serving-section">
+                    <div class="pulse-card glass-card">
+                        <h2 class="monitor-title">SEDANG DILAYANI</h2>
+                        <div class="monitor-number glow-text" id="monitor-current-number">--</div>
+                        <div class="monitor-counter" id="monitor-current-counter">Silakan Menunggu</div>
+                    </div>
+                </div>
+                <div class="history-section glass-card">
+                    <h3>Panggilan Terakhir</h3>
+                    <div class="history-list" id="monitor-history-list">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Running Text -->
+            <div class="marquee-container glass-card">
+                <div class="marquee-content">
+                    <span>📢 Perhatian: Jam layanan istirahat pada pukul 12.00 - 13.00 WIB.</span>
+                    <span>🎓 Siapkan dokumen identitas Anda sebelum menuju ke loket.</span>
+                    <span>⚠️ Pastikan nomor antrean Anda sesuai dengan panggilan.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!--        ADMIN PORTAL VIEW       -->
+        <!-- ============================== -->
+        <div id="view-admin" class="role-view">
+            
+            <!-- Admin Login -->
+            <div id="admin-step-login" class="admin-subview active">
+                <div class="login-card glass-card">
+                    <h2>Portal Admin</h2>
+                    <p>Masuk untuk mengelola antrean</p>
+                    <div class="form-group">
+                        <label>Nama Pengguna</label>
+                        <input type="text" id="admin-user" value="admin">
+                    </div>
+                    <div class="form-group">
+                        <label>Kata Sandi</label>
+                        <input type="password" id="admin-pass" value="password">
+                    </div>
+                    <button class="btn-primary" onclick="App.adminLogin()">Masuk</button>
+                    <div class="login-links">
+                        <a href="#" onclick="Navigation.goToAdminStep('forgot')">Lupa Kata Sandi?</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Forgot Password -->
+            <div id="admin-step-forgot" class="admin-subview">
+                <div class="login-card glass-card">
+                    <h2>Reset Kata Sandi</h2>
+                    <p>Masukkan email untuk menerima tautan</p>
+                    <div class="form-group">
+                        <label>Alamat Email</label>
+                        <input type="email" id="forgot-email" placeholder="admin@sadt.id">
+                    </div>
+                    <button class="btn-primary" onclick="App.simulatePasswordReset()">Kirim Tautan Reset</button>
+                    <div id="reset-msg" class="success-msg" style="display:none; margin-top:15px;">Tautan Reset Kata Sandi Terkirim!</div>
+                    <div class="login-links" style="margin-top:20px;">
+                        <a href="#" onclick="Navigation.goToAdminStep('login')">← Kembali ke Login</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Admin Dashboard -->
+            <div id="admin-step-dashboard" class="admin-subview">
+                <header class="dashboard-header">
+                    <h2>Pusat Kendali</h2>
+                    <button class="btn-outline" onclick="App.adminLogout()">Keluar</button>
+                </header>
+                
+                <div class="stats-row">
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">Aktif Saat Ini</div>
+                        <div class="stat-value glow-text" id="stat-active">0</div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">Total Dilayani</div>
+                        <div class="stat-value" id="stat-served">0</div>
+                    </div>
+                    <div class="stat-card glass-card">
+                        <div class="stat-label">Rata-rata Waktu Tunggu</div>
+                        <div class="stat-value" id="stat-wait">0m</div>
+                    </div>
+                    <div class="stat-card glass-card" style="align-items: center;">
+                        <button class="btn-outline btn-danger" onclick="App.resetQueue()">Reset Semua Data</button>
+                    </div>
+                </div>
+
+                <div class="control-center glass-card">
+                    <div class="table-responsive">
+                        <table class="queue-table">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Tiket</th>
+                                    <th>Pengunjung</th>
+                                    <th>Layanan</th>
+                                    <th>Status</th>
+                                    <th>Waktu Tunggu</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="admin-table-body">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="assets/js/ui-navigation.js"></script>
+    <script src="assets/js/app.js"></script>
+</body>
+</html>
