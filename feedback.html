@@ -57,7 +57,18 @@
 
         document.getElementById('feedback-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            // In a real app, save feedback to backend
+            
+            // Get rating
+            const ratingInput = document.querySelector('input[name="rating"]:checked');
+            const rating = ratingInput ? ratingInput.value : 5;
+            
+            // Get review text
+            const reviewText = document.getElementById('review').value;
+            
+            // Save feedback
+            const currentTicketId = QueueSystem.getCurrentTicketId();
+            QueueSystem.addFeedback(currentTicketId, rating, reviewText);
+            
             alert('Terima kasih atas penilaian Anda!');
             QueueSystem.setCurrentTicketId(null);
             QueueSystem.navigate('index.html');

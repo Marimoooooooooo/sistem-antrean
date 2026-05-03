@@ -58,6 +58,33 @@ const QueueSystem = {
         if(updated) {
             this.saveQueues(queues);
         }
+    },
+
+    // Feedback Management
+    getFeedbacks: function() {
+        return JSON.parse(localStorage.getItem('system_feedbacks')) || [];
+    },
+
+    saveFeedbacks: function(feedbacks) {
+        localStorage.setItem('system_feedbacks', JSON.stringify(feedbacks));
+    },
+
+    addFeedback: function(ticketId, rating, reviewText) {
+        const feedbacks = this.getFeedbacks();
+        const ticket = this.getTicketById(ticketId);
+        
+        feedbacks.push({
+            id: 'fb-' + Date.now().toString(36),
+            ticketId: ticketId,
+            ticketNumber: ticket ? ticket.ticketNumber : 'Unknown',
+            name: ticket ? ticket.name : 'Anonymous',
+            serviceName: ticket ? ticket.serviceName : 'Unknown',
+            rating: parseInt(rating),
+            review: reviewText,
+            timestamp: new Date().toISOString()
+        });
+        
+        this.saveFeedbacks(feedbacks);
     }
 };
 
