@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giliran Anda - Enterprise Student Queue System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .pulse-bg { animation: pulseBg 2s infinite; }
+        @keyframes pulseBg {
+            0% { background-color: rgb(29, 78, 216); } /* blue-700 */
+            50% { background-color: rgb(30, 64, 175); } /* blue-800 */
+            100% { background-color: rgb(29, 78, 216); }
+        }
+    </style>
+</head>
+<body class="pulse-bg text-white min-h-screen flex flex-col antialiased items-center justify-center p-6">
+    
+    <div class="flex flex-col items-center text-center animate-bounce mb-8">
+        <div class="w-20 h-20 bg-white text-blue-700 rounded-full flex items-center justify-center mb-6 shadow-lg">
+            <i data-lucide="bell-ring" class="w-10 h-10"></i>
+        </div>
+        <h1 class="text-3xl font-bold tracking-tight uppercase">SILAKAN KE LOKET SEKARANG</h1>
+        <p class="text-blue-200 mt-2 text-lg">Giliran Anda telah tiba</p>
+    </div>
+
+    <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 w-full max-w-sm flex flex-col items-center shadow-2xl">
+        <h2 id="service-name" class="text-blue-100 font-medium mb-2 uppercase tracking-wide text-sm">Layanan</h2>
+        <div id="ticket-number" class="text-6xl font-black text-white mb-2 drop-shadow-md">--</div>
+        <p id="user-name" class="text-xl text-blue-50 font-medium capitalize mb-8">--</p>
+
+        <div class="w-full bg-blue-950/50 rounded-lg p-4 text-center border border-blue-800">
+            <p class="text-blue-200 text-xs uppercase tracking-wider mb-1">Sisa Waktu Anda</p>
+            <div id="timer" class="text-4xl font-mono font-bold text-amber-300">03:00</div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+
+        const ticketId = localStorage.getItem('current_user_ticket');
+        if(!ticketId) window.location.href = 'index.html';
+
+        function checkStatus() {
+            let queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            let ticketIndex = queues.findIndex(q => q.id === ticketId);
+            
+            if(ticketIndex === -1) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            let ticket = queues[ticketIndex];
+
+            document.getElementById('service-name').textContent = ticket.serviceName;
+            document.getElementById('ticket-number').textContent = ticket.ticketNumber;
+            document.getElementById('user-name').textContent = ticket.name;
+
+            if (ticket.status === 'completed') {
+                window.location.href = 'ticket-completed.html';
+                return;
+            } else if (ticket.status === 'missed') {
+                window.location.href = 'ticket-missed.html';
+                return;
+            }
+
+            // Calculate remaining time (3 minutes = 180 seconds)
+            if(ticket.calledAt) {
+                const calledTime = new Date(ticket.calledAt).getTime();
+                const now = new Date().getTime();
+                const diffSecs = Math.floor((now - calledTime) / 1000);
+                const remaining = 180 - diffSecs;
+
+                if (remaining <= 0) {
+                    // Auto miss
+                    queues[ticketIndex].status = 'missed';
+                    localStorage.setItem('system_queues', JSON.stringify(queues));
+                    window.location.href = 'ticket-missed.html';
+                } else {
+                    const m = Math.floor(remaining / 60).toString().padStart(2, '0');
+                    const s = (remaining % 60).toString().padStart(2, '0');
+                    document.getElementById('timer').textContent = `${m}:${s}`;
+                    if(remaining < 30) {
+                        document.getElementById('timer').classList.add('text-red-400', 'animate-pulse');
+                        document.getElementById('timer').classList.remove('text-amber-300');
+                    }
+                }
+            }
+        }
+
+        checkStatus();
+        setInterval(checkStatus, 1000);
+    </script>
+</body>
+</html>

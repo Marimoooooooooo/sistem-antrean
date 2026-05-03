@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>E-Tiket Antrean - Enterprise Student Queue System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased items-center justify-center p-6">
+    
+    <div class="w-full max-w-sm bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden flex flex-col text-center relative">
+        
+        <!-- Header Ribbon -->
+        <div class="bg-blue-900/30 text-blue-400 text-xs font-semibold py-2 px-4 uppercase tracking-wider border-b border-slate-700">
+            E-Tiket Aktif
+        </div>
+
+        <div class="p-8 flex flex-col items-center">
+            <h2 id="service-name" class="text-sm text-slate-400 font-medium mb-1">Layanan</h2>
+            <div id="ticket-number" class="text-5xl font-bold text-slate-100 my-4 tracking-tight">--</div>
+            <p id="user-name" class="text-lg text-slate-300 font-medium capitalize">--</p>
+        </div>
+
+        <div class="bg-slate-900 border-t border-slate-700 p-6 flex flex-col gap-4 text-sm">
+            <div class="flex justify-between items-center text-slate-400">
+                <span>Status</span>
+                <span class="px-3 py-1 bg-amber-900/40 text-amber-500 rounded-full text-xs font-semibold flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></span>
+                    Menunggu
+                </span>
+            </div>
+            <div class="flex justify-between items-center text-slate-400 border-t border-slate-800 pt-3">
+                <span>Estimasi Waktu</span>
+                <span class="text-slate-200 font-medium">~ 15 Menit</span>
+            </div>
+        </div>
+
+        <!-- Perforation holes visual -->
+        <div class="absolute left-0 right-0 bottom-[116px] flex justify-between px-[-8px]">
+            <div class="w-4 h-4 bg-slate-900 rounded-full transform -translate-x-1/2"></div>
+            <div class="w-4 h-4 bg-slate-900 rounded-full transform translate-x-1/2"></div>
+        </div>
+    </div>
+
+    <p class="text-slate-500 text-sm mt-8 text-center max-w-xs">
+        Mohon bersiap di area tunggu. Layar ini akan otomatis berubah saat nomor Anda dipanggil.
+    </p>
+
+    <script>
+        lucide.createIcons();
+
+        const ticketId = localStorage.getItem('current_user_ticket');
+        if(!ticketId) window.location.href = 'index.html';
+
+        function checkStatus() {
+            const queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            const ticket = queues.find(q => q.id === ticketId);
+
+            if(!ticket) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('service-name').textContent = ticket.serviceName;
+            document.getElementById('ticket-number').textContent = ticket.ticketNumber;
+            document.getElementById('user-name').textContent = ticket.name;
+
+            if(ticket.status === 'called') {
+                window.location.href = 'ticket-called.html';
+            } else if (ticket.status === 'missed') {
+                window.location.href = 'ticket-missed.html';
+            } else if (ticket.status === 'completed') {
+                window.location.href = 'ticket-completed.html';
+            }
+        }
+
+        // Check immediately then poll every 1 second
+        checkStatus();
+        setInterval(checkStatus, 1000);
+    </script>
+</body>
+</html>

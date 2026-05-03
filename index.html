@@ -3,214 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistem Antrean Digital Terpadu (SADT)</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Pilih Layanan - Enterprise Student Queue System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
-<body>
-    <!-- Demo Role Switcher -->
-    <div class="demo-role-switcher" id="demo-nav">
-        <button onclick="Navigation.switchRole('user')" class="active" id="btn-role-user">Portal Pengunjung</button>
-        <button onclick="Navigation.switchRole('monitor')" id="btn-role-monitor">Monitor Publik</button>
-        <button onclick="Navigation.switchRole('admin')" id="btn-role-admin">Portal Admin</button>
-    </div>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+    
+    <!-- Header -->
+    <header class="p-6 bg-slate-900 border-b border-slate-700 sticky top-0 z-10 shadow-sm">
+        <h1 class="text-xl font-semibold text-center tracking-wide">Layanan Mahasiswa</h1>
+        <p class="text-slate-400 text-sm text-center mt-1">Silakan pilih layanan yang Anda butuhkan</p>
+    </header>
 
-    <div class="main-container">
+    <!-- Main Content -->
+    <main class="flex-1 p-6 flex flex-col gap-4 max-w-md mx-auto w-full justify-center">
         
-        <!-- ============================== -->
-        <!--        USER PORTAL VIEW        -->
-        <!-- ============================== -->
-        <div id="view-user" class="role-view active">
-            
-            <!-- Step 1: Service Selection -->
-            <div id="user-step-service" class="user-subview active">
-                <header class="user-header">
-                    <h1>Sistem Antrean Digital Terpadu</h1>
-                    <p>Status Umum Saat Ini: <span class="status-badge" id="general-status">Normal</span></p>
-                </header>
-                <div class="service-grid">
-                    <button class="service-card glass-card" onclick="Navigation.selectService('Layanan Umum')">
-                        <h3>Layanan Umum</h3>
-                        <p>Informasi dan pertanyaan</p>
-                    </button>
-                    <button class="service-card glass-card" onclick="Navigation.selectService('Bantuan Teknis')">
-                        <h3>Bantuan Teknis</h3>
-                        <p>Masalah IT dan sistem</p>
-                    </button>
+        <!-- Card 1: Pengambilan KPM -->
+        <button onclick="selectService('Pengambilan KPM', 'KPM')" class="w-full text-left bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-sm hover:bg-slate-700 transition-colors duration-200 group flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
+                    <i data-lucide="credit-card"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-medium text-slate-100">Pengambilan KPM</h2>
+                    <p class="text-sm text-slate-400 mt-0.5">Kartu Tanda Mahasiswa</p>
                 </div>
             </div>
+            <i data-lucide="chevron-right" class="text-slate-500 group-hover:text-slate-300"></i>
+        </button>
 
-            <!-- Step 2: Identity Input -->
-            <div id="user-step-identity" class="user-subview">
-                <div class="identity-card glass-card">
-                    <button class="btn-back" onclick="Navigation.goToUserStep('service')">← Kembali</button>
-                    <h2>Detail Pengunjung</h2>
-                    <p>Silakan masukkan informasi Anda (Opsional)</p>
-                    <div class="form-group">
-                        <label>Nama Lengkap</label>
-                        <input type="text" id="visitor-name" placeholder="Misal: Budi Santoso">
-                    </div>
-                    <div class="form-group">
-                        <label>Nomor Telepon</label>
-                        <input type="tel" id="visitor-phone" placeholder="Misal: 0812...">
-                    </div>
-                    <button class="btn-primary" onclick="App.generateTicket()">Buat Tiket</button>
+        <!-- Card 2: Pengambilan Almamater -->
+        <button onclick="selectService('Pengambilan Almamater', 'ALM')" class="w-full text-left bg-slate-800 border border-slate-700 rounded-lg p-5 shadow-sm hover:bg-slate-700 transition-colors duration-200 group flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full bg-blue-900/50 flex items-center justify-center text-blue-500 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-200">
+                    <i data-lucide="shirt"></i>
+                </div>
+                <div>
+                    <h2 class="text-lg font-medium text-slate-100">Pengambilan Almamater</h2>
+                    <p class="text-sm text-slate-400 mt-0.5">Jas Almamater Kampus</p>
                 </div>
             </div>
+            <i data-lucide="chevron-right" class="text-slate-500 group-hover:text-slate-300"></i>
+        </button>
 
-            <!-- Step 3: E-Ticket Dashboard -->
-            <div id="user-step-ticket" class="user-subview">
-                <div class="ticket-dashboard glass-card" id="printable-ticket">
-                    <div class="ticket-header">
-                        <h2>E-Tiket Anda</h2>
-                        <span id="ticket-service-name">Layanan</span>
-                    </div>
-                    <div class="ticket-number-display glow-text" id="user-ticket-number">A-001</div>
-                    <div class="ticket-details">
-                        <p>Nama: <strong id="user-ticket-name">-</strong></p>
-                        <p>Waktu Terbit: <strong id="user-ticket-time">-</strong></p>
-                    </div>
-                    
-                    <div class="progress-section inner-shadow">
-                        <div class="progress-labels">
-                            <span>Menunggu Giliran: <strong id="people-ahead">0</strong> orang</span>
-                            <span>Estimasi: <strong id="est-wait">0 menit</strong></span>
-                        </div>
-                        <div class="progress-bar-container">
-                            <div class="progress-bar" id="wait-progress"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="action-buttons">
-                    <button class="btn-outline" onclick="App.printTicket()">Unduh PDF</button>
-                    <button class="btn-outline" onclick="App.takeAnotherTicket()">Tiket Baru</button>
-                </div>
-            </div>
-        </div>
+    </main>
 
-        <!-- ============================== -->
-        <!--     PUBLIC MONITOR VIEW        -->
-        <!-- ============================== -->
-        <div id="view-monitor" class="role-view">
-            <div class="monitor-layout">
-                <div class="now-serving-section">
-                    <div class="pulse-card glass-card">
-                        <h2 class="monitor-title">SEDANG DILAYANI</h2>
-                        <div class="monitor-number glow-text" id="monitor-current-number">--</div>
-                        <div class="monitor-counter" id="monitor-current-counter">Silakan Menunggu</div>
-                    </div>
-                </div>
-                <div class="history-section glass-card">
-                    <h3>Panggilan Terakhir</h3>
-                    <div class="history-list" id="monitor-history-list">
-                        <!-- Populated by JS -->
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Running Text -->
-            <div class="marquee-container glass-card">
-                <div class="marquee-content">
-                    <span>📢 Perhatian: Jam layanan istirahat pada pukul 12.00 - 13.00 WIB.</span>
-                    <span>🎓 Siapkan dokumen identitas Anda sebelum menuju ke loket.</span>
-                    <span>⚠️ Pastikan nomor antrean Anda sesuai dengan panggilan.</span>
-                </div>
-            </div>
-        </div>
+    <!-- Footer -->
+    <footer class="p-6 text-center text-slate-500 text-xs">
+        &copy; 2026 Enterprise Student Queue System
+    </footer>
 
-        <!-- ============================== -->
-        <!--        ADMIN PORTAL VIEW       -->
-        <!-- ============================== -->
-        <div id="view-admin" class="role-view">
-            
-            <!-- Admin Login -->
-            <div id="admin-step-login" class="admin-subview active">
-                <div class="login-card glass-card">
-                    <h2>Portal Admin</h2>
-                    <p>Masuk untuk mengelola antrean</p>
-                    <div class="form-group">
-                        <label>Nama Pengguna</label>
-                        <input type="text" id="admin-user" value="admin">
-                    </div>
-                    <div class="form-group">
-                        <label>Kata Sandi</label>
-                        <input type="password" id="admin-pass" value="password">
-                    </div>
-                    <button class="btn-primary" onclick="App.adminLogin()">Masuk</button>
-                    <div class="login-links">
-                        <a href="#" onclick="Navigation.goToAdminStep('forgot')">Lupa Kata Sandi?</a>
-                    </div>
-                </div>
-            </div>
+    <script>
+        lucide.createIcons();
 
-            <!-- Forgot Password -->
-            <div id="admin-step-forgot" class="admin-subview">
-                <div class="login-card glass-card">
-                    <h2>Reset Kata Sandi</h2>
-                    <p>Masukkan email untuk menerima tautan</p>
-                    <div class="form-group">
-                        <label>Alamat Email</label>
-                        <input type="email" id="forgot-email" placeholder="admin@sadt.id">
-                    </div>
-                    <button class="btn-primary" onclick="App.simulatePasswordReset()">Kirim Tautan Reset</button>
-                    <div id="reset-msg" class="success-msg" style="display:none; margin-top:15px;">Tautan Reset Kata Sandi Terkirim!</div>
-                    <div class="login-links" style="margin-top:20px;">
-                        <a href="#" onclick="Navigation.goToAdminStep('login')">← Kembali ke Login</a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Admin Dashboard -->
-            <div id="admin-step-dashboard" class="admin-subview">
-                <header class="dashboard-header">
-                    <h2>Pusat Kendali</h2>
-                    <button class="btn-outline" onclick="App.adminLogout()">Keluar</button>
-                </header>
-                
-                <div class="stats-row">
-                    <div class="stat-card glass-card">
-                        <div class="stat-label">Aktif Saat Ini</div>
-                        <div class="stat-value glow-text" id="stat-active">0</div>
-                    </div>
-                    <div class="stat-card glass-card">
-                        <div class="stat-label">Total Dilayani</div>
-                        <div class="stat-value" id="stat-served">0</div>
-                    </div>
-                    <div class="stat-card glass-card">
-                        <div class="stat-label">Rata-rata Waktu Tunggu</div>
-                        <div class="stat-value" id="stat-wait">0m</div>
-                    </div>
-                    <div class="stat-card glass-card" style="align-items: center;">
-                        <button class="btn-outline btn-danger" onclick="App.resetQueue()">Reset Semua Data</button>
-                    </div>
-                </div>
-
-                <div class="control-center glass-card">
-                    <div class="table-responsive">
-                        <table class="queue-table">
-                            <thead>
-                                <tr>
-                                    <th>Nomor Tiket</th>
-                                    <th>Pengunjung</th>
-                                    <th>Layanan</th>
-                                    <th>Status</th>
-                                    <th>Waktu Tunggu</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="admin-table-body">
-                                <!-- Populated by JS -->
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
-
-    <script src="assets/js/ui-navigation.js"></script>
-    <script src="assets/js/app.js"></script>
+        function selectService(serviceName, serviceCode) {
+            localStorage.setItem('selected_service_name', serviceName);
+            localStorage.setItem('selected_service_code', serviceCode);
+            window.location.href = 'register.html';
+        }
+    </script>
 </body>
 </html>

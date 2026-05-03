@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Penilaian Layanan - Enterprise Student Queue System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .star-rating input { display: none; }
+        .star-rating label { cursor: pointer; color: #475569; transition: color 0.2s; }
+        .star-rating input:checked ~ label,
+        .star-rating label:hover,
+        .star-rating label:hover ~ label { color: #eab308; } /* yellow-500 */
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+    
+    <header class="p-6 bg-slate-900 border-b border-slate-700 sticky top-0 z-10 shadow-sm flex items-center">
+        <button onclick="window.location.href='index.html'" class="text-slate-400 hover:text-white transition-colors">
+            <i data-lucide="x"></i>
+        </button>
+        <div class="flex-1 text-center pr-6">
+            <h1 class="text-xl font-semibold tracking-wide">Penilaian Layanan</h1>
+        </div>
+    </header>
+
+    <main class="flex-1 p-6 flex flex-col items-center justify-center max-w-md mx-auto w-full">
+        
+        <form id="feedback-form" class="bg-slate-800 border border-slate-700 rounded-lg p-8 shadow-sm flex flex-col items-center w-full">
+            
+            <h2 class="text-lg font-medium text-slate-200 mb-6 text-center">Seberapa puas Anda dengan pelayanan kami hari ini?</h2>
+
+            <div class="star-rating flex flex-row-reverse justify-center gap-2 mb-8">
+                <input type="radio" id="star5" name="rating" value="5" required />
+                <label for="star5"><i data-lucide="star" class="w-10 h-10 fill-current"></i></label>
+                <input type="radio" id="star4" name="rating" value="4" />
+                <label for="star4"><i data-lucide="star" class="w-10 h-10 fill-current"></i></label>
+                <input type="radio" id="star3" name="rating" value="3" />
+                <label for="star3"><i data-lucide="star" class="w-10 h-10 fill-current"></i></label>
+                <input type="radio" id="star2" name="rating" value="2" />
+                <label for="star2"><i data-lucide="star" class="w-10 h-10 fill-current"></i></label>
+                <input type="radio" id="star1" name="rating" value="1" />
+                <label for="star1"><i data-lucide="star" class="w-10 h-10 fill-current"></i></label>
+            </div>
+
+            <div class="w-full flex flex-col gap-2 mb-6">
+                <label for="review" class="text-sm font-medium text-slate-400">Ulasan Singkat (Opsional)</label>
+                <textarea id="review" rows="4" placeholder="Bagikan pengalaman Anda..." class="w-full bg-slate-900 border border-slate-700 rounded-lg px-4 py-3 text-slate-100 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 transition-all placeholder-slate-500 resize-none"></textarea>
+            </div>
+
+            <button type="submit" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-medium py-3 px-4 rounded-lg transition-colors shadow-sm">
+                Kirim Penilaian
+            </button>
+            
+        </form>
+
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        document.getElementById('feedback-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            // In a real app, save feedback to backend
+            alert('Terima kasih atas penilaian Anda!');
+            localStorage.removeItem('current_user_ticket');
+            window.location.href = 'index.html';
+        });
+    </script>
+</body>
+</html>
