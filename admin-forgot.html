@@ -6,9 +6,7 @@
     <title>Lupa Password - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-6 antialiased relative overflow-hidden">
     
@@ -30,7 +28,7 @@
             </div>
         </div>
 
-        <form class="p-8 flex flex-col gap-5" onsubmit="event.preventDefault(); alert('Tautan reset password telah dikirim ke email Anda.'); window.location.href='admin-login.html';">
+        <form class="p-8 flex flex-col gap-5" onsubmit="event.preventDefault(); alert('Tautan reset password telah dikirim ke email Anda.'); QueueSystem.navigate('admin-login.html');">
             
             <div class="flex flex-col gap-2">
                 <label for="email" class="text-sm font-medium text-slate-300">Alamat Email</label>
@@ -50,6 +48,7 @@
 
     </div>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
     </script>

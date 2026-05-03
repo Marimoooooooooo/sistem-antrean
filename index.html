@@ -6,11 +6,15 @@
     <title>Pilih Layanan - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased relative">
+    
+    <!-- Admin Portal Button -->
+    <a href="admin-login.html" class="absolute top-6 right-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors z-20">
+        <span class="text-sm font-medium">Admin Portal</span>
+        <i data-lucide="user-cog" class="w-5 h-5"></i>
+    </a>
     
     <!-- Header -->
     <header class="p-6 bg-slate-900 border-b border-slate-700 sticky top-0 z-10 shadow-sm">
@@ -56,13 +60,14 @@
         &copy; 2026 Enterprise Student Queue System
     </footer>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
 
         function selectService(serviceName, serviceCode) {
             localStorage.setItem('selected_service_name', serviceName);
             localStorage.setItem('selected_service_code', serviceCode);
-            window.location.href = 'register.html';
+            QueueSystem.navigate('register.html');
         }
     </script>
 </body>

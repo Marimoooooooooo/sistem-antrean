@@ -6,14 +6,7 @@
     <title>Admin Dashboard - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-        /* Custom scrollbar */
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; } /* slate-900 */
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; } /* slate-700 */
-        ::-webkit-scrollbar-thumb:hover { background: #475569; } /* slate-600 */
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 h-screen flex overflow-hidden antialiased">
     
@@ -99,11 +92,12 @@
 
     </main>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
 
         function renderTable() {
-            const queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            const queues = QueueSystem.getQueues();
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
@@ -163,7 +157,7 @@
         }
 
         function updateTimers() {
-            const queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            const queues = QueueSystem.getQueues();
             queues.forEach((ticket, index) => {
                 if(ticket.status === 'called' && ticket.calledAt) {
                     const el = document.getElementById(`timer-${ticket.id}`);
@@ -189,39 +183,39 @@
         }
 
         function callTicket(id) {
-            let queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            let queues = QueueSystem.getQueues();
             let index = queues.findIndex(q => q.id === id);
             if(index > -1) {
                 queues[index].status = 'called';
                 queues[index].calledAt = new Date().toISOString();
-                localStorage.setItem('system_queues', JSON.stringify(queues));
+                QueueSystem.saveQueues(queues);
                 renderTable();
             }
         }
 
         function completeTicket(id) {
-            let queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            let queues = QueueSystem.getQueues();
             let index = queues.findIndex(q => q.id === id);
             if(index > -1) {
                 queues[index].status = 'completed';
-                localStorage.setItem('system_queues', JSON.stringify(queues));
+                QueueSystem.saveQueues(queues);
                 renderTable();
             }
         }
 
         function skipTicket(id) {
-            let queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            let queues = QueueSystem.getQueues();
             let index = queues.findIndex(q => q.id === id);
             if(index > -1) {
                 queues[index].status = 'missed';
-                localStorage.setItem('system_queues', JSON.stringify(queues));
+                QueueSystem.saveQueues(queues);
                 renderTable();
             }
         }
 
         function clearAll() {
             if(confirm('Hapus semua antrean saat ini?')) {
-                localStorage.setItem('system_queues', JSON.stringify([]));
+                QueueSystem.saveQueues([]);
                 renderTable();
             }
         }

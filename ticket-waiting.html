@@ -6,9 +6,7 @@
     <title>E-Tiket Antrean - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased items-center justify-center p-6">
     
@@ -50,18 +48,19 @@
         Mohon bersiap di area tunggu. Layar ini akan otomatis berubah saat nomor Anda dipanggil.
     </p>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
 
-        const ticketId = localStorage.getItem('current_user_ticket');
-        if(!ticketId) window.location.href = 'index.html';
+        const ticketId = QueueSystem.getCurrentTicketId();
+        if(!ticketId) QueueSystem.navigate('index.html');
 
         function checkStatus() {
-            const queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            const queues = QueueSystem.getQueues();
             const ticket = queues.find(q => q.id === ticketId);
 
             if(!ticket) {
-                window.location.href = 'index.html';
+                QueueSystem.navigate('index.html');
                 return;
             }
 
@@ -70,11 +69,11 @@
             document.getElementById('user-name').textContent = ticket.name;
 
             if(ticket.status === 'called') {
-                window.location.href = 'ticket-called.html';
+                QueueSystem.navigate('ticket-called.html');
             } else if (ticket.status === 'missed') {
-                window.location.href = 'ticket-missed.html';
+                QueueSystem.navigate('ticket-missed.html');
             } else if (ticket.status === 'completed') {
-                window.location.href = 'ticket-completed.html';
+                QueueSystem.navigate('ticket-completed.html');
             }
         }
 

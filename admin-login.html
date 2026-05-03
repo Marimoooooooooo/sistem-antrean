@@ -6,9 +6,7 @@
     <title>Admin Login - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex items-center justify-center p-6 antialiased relative overflow-hidden">
     
@@ -26,7 +24,7 @@
             <p class="text-slate-400 text-sm mt-1">Masuk untuk mengelola sistem antrean</p>
         </div>
 
-        <form class="p-8 flex flex-col gap-5" onsubmit="event.preventDefault(); window.location.href='admin-dashboard.html';">
+        <form class="p-8 flex flex-col gap-5" onsubmit="event.preventDefault(); QueueSystem.navigate('admin-dashboard.html');">
             
             <div class="flex flex-col gap-2">
                 <label for="username" class="text-sm font-medium text-slate-300">Username</label>
@@ -60,6 +58,7 @@
 
     </div>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
     </script>

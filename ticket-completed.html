@@ -6,9 +6,7 @@
     <title>Selesai - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased items-center justify-center p-6">
     
@@ -34,12 +32,13 @@
 
     </div>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
 
         function newQueue() {
-            localStorage.removeItem('current_user_ticket');
-            window.location.href = 'index.html';
+            QueueSystem.setCurrentTicketId(null);
+            QueueSystem.navigate('index.html');
         }
     </script>
 </body>

@@ -6,9 +6,7 @@
     <title>Pendaftaran Antrean - Enterprise Student Queue System</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased">
     
@@ -46,6 +44,7 @@
 
     </main>
 
+    <script src="assets/js/app.js"></script>
     <script>
         lucide.createIcons();
 
@@ -63,7 +62,7 @@
             if(!name || !phone) return;
 
             // Generate ticket data
-            let queues = JSON.parse(localStorage.getItem('system_queues')) || [];
+            let queues = QueueSystem.getQueues();
             
             // Filter by service to get current queue number
             const serviceQueues = queues.filter(q => q.serviceCode === serviceCode);
@@ -83,10 +82,10 @@
             };
 
             queues.push(newTicket);
-            localStorage.setItem('system_queues', JSON.stringify(queues));
-            localStorage.setItem('current_user_ticket', newTicket.id);
+            QueueSystem.saveQueues(queues);
+            QueueSystem.setCurrentTicketId(newTicket.id);
             
-            window.location.href = 'ticket-waiting.html';
+            QueueSystem.navigate('ticket-waiting.html');
         });
     </script>
 </body>
