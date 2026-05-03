@@ -8,8 +8,14 @@
     <script src="https://unpkg.com/lucide@latest"></script>
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased items-center justify-center p-6">
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col antialiased items-center justify-center p-6 relative">
     
+    <!-- Tombol Kembali -->
+    <button onclick="QueueSystem.navigate('ticket-generated.html')" class="absolute top-6 left-6 text-slate-400 hover:text-white transition-colors flex items-center gap-2 z-20">
+        <i data-lucide="arrow-left" class="w-5 h-5"></i>
+        <span class="text-sm font-medium">Kembali</span>
+    </button>
+
     <div class="w-full max-w-sm bg-slate-800 border border-slate-700 rounded-lg shadow-sm overflow-hidden flex flex-col text-center relative">
         
         <!-- Header Ribbon -->
